@@ -1,0 +1,3 @@
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+export function Subpage({ title, description, children }: { title: string; description: string; children: React.ReactNode }) { return <main className="min-h-screen p-6 md:p-10"><div className="max-w-5xl mx-auto"><Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-ink"><ArrowLeft size={16}/> Voltar ao dashboard</Link><h1 className="text-3xl font-bold mt-8">{title}</h1><p className="text-slate-500 mt-2">{description}</p><section className="card p-6 mt-8">{children}</section></div></main> }

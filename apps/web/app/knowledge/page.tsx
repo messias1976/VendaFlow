@@ -1,0 +1,2 @@
+import { Subpage } from '../components/subpage';
+export default function KnowledgePage() { return <Subpage title="Base de conhecimento" description="Documentos usados pelo agente para responder com contexto."><div className="flex justify-between items-center"><div><p className="font-semibold">Catálogo de produtos</p><p className="text-sm text-slate-500">Atualizado hoje · Pronto</p></div><button className="bg-ink text-white rounded-lg px-4 py-2">Adicionar documento</button></div></Subpage> }

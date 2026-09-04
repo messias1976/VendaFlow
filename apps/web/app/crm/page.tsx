@@ -1,0 +1,2 @@
+import { Subpage } from '../components/subpage';
+export default function CrmPage() { return <Subpage title="Leads e CRM" description="Organize oportunidades e acompanhe seu funil de vendas."><div className="grid md:grid-cols-3 gap-4">{[['Novos',34],['Em atendimento',21],['Convertidos',12]].map(([label,total])=><div className="border rounded-xl p-5" key={String(label)}><p className="text-slate-500">{label}</p><strong className="text-3xl block mt-2">{String(total)}</strong></div>)}</div></Subpage> }

@@ -1,0 +1,103 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum UserRole { OWNER ADMIN AGENT }
+enum ConversationStatus { OPEN PENDING RESOLVED }
+enum MessageDirection { INBOUND OUTBOUND }
+enum MasterRole { SUPER_ADMIN OPERATIONS_ADMIN SUPPORT FINANCE }
+
+model Tenant {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  plan String @default("STARTER")
+  createdAt DateTime @default(now())
+  users User[]
+  agents Agent[]
+  contacts Contact[]
+  conversations Conversation[]
+  documents Document[]
+  auditEvents AuditEvent[]
+}
+model User {
+  id String @id @default(cuid())
+  tenantId String
+  name String
+  email String @unique
+  role UserRole @default(AGENT)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+model MasterUser {
+  id String @id @default(cuid())
+  name String
+  email String @unique
+  role MasterRole @default(SUPPORT)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  auditEvents AuditEvent[]
+}
+model Agent {
+  id String @id @default(cuid())
+  tenantId String
+  name String
+  description String?
+  systemPrompt String
+  isActive Boolean @default(true)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+}
+model Contact {
+  id String @id @default(cuid())
+  tenantId String
+  name String
+  phone String
+  email String?
+  status String @default("NEW")
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+  createdAt DateTime @default(now())
+  @@index([tenantId, status])
+}
+model Conversation {
+  id String @id @default(cuid())
+  tenantId String
+  contactId String
+  agentId String?
+  status ConversationStatus @default(OPEN)
+  lastMessageAt DateTime @default(now())
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  agent Agent? @relation(fields: [agentId], references: [id])
+  messages Message[]
+  @@index([tenantId, status])
+}
+model Message {
+  id String @id @default(cuid())
+  conversationId String
+  direction MessageDirection
+  body String
+  providerId String?
+  createdAt DateTime @default(now())
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+model Document {
+  id String @id @default(cuid())
+  tenantId String
+  title String
+  content String
+  status String @default("READY")
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+model AuditEvent {
+  id String @id @default(cuid())
+  tenantId String
+  action String
+  actorId String?
+  masterUserId String?
+  metadata Json?
+  createdAt DateTime @default(now())
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  masterUser MasterUser? @relation(fields: [masterUserId], references: [id])
+  @@index([tenantId, createdAt])
+}

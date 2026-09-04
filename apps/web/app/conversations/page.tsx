@@ -1,0 +1,2 @@
+import { Subpage } from '../components/subpage';
+export default function ConversationsPage() { return <Subpage title="Conversas" description="Acompanhe os atendimentos realizados pelo agente."><div className="space-y-4">{['Mariana Costa — Quero saber o preço do plano Pro','Rafael Mendes — Vocês entregam em todo o Brasil?','Camila Oliveira — Perfeito, vou analisar e retorno!'].map(item=><div className="border rounded-lg p-4" key={item}><p className="font-semibold">{item}</p><span className="text-xs text-emerald-600">Atendimento ativo</span></div>)}</div></Subpage> }

@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root { --ink: #14213d; --muted: #718096; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f7f9fc; color: var(--ink); font-family: Arial, sans-serif; }
+.card { border: 1px solid #e8edf4; border-radius: 16px; background: white; box-shadow: 0 8px 30px rgba(20,33,61,.04); }
